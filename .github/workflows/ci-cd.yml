@@ -34,7 +34,7 @@ jobs:
 
       - name: Rodar testes automatizados
         run: |
-          pytest tests/ --import-mode=importlib
+          pytest . --import-mode=importlib
 
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
