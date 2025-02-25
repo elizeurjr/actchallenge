@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Pipeline
 
 # definindo o evento que irá disparar o pipeline
 on:
@@ -32,7 +32,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
 #      - name: Rodar testes
 #        run: |
 #          python -m pytest tests/ --import-mode=importlib
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./static
