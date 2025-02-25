@@ -1,19 +1,12 @@
-name: Pipeline
-
-# definindo o evento que irá disparar o pipeline
 on:
   push:
     branches:
       - develop
       - main
-
   pull_request:
     branches:
       - develop
       - main
-
-
-# definindo os jobs
 
 jobs:
   build-and-test:
@@ -32,9 +25,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-#      - name: Rodar testes
-#        run: |
-#          python -m pytest tests/ --import-mode=importlib
+          pip install flake8 pytest
+
+      - name: Verificar estilo de código (Linting)
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Rodar testes automatizados
+        run: |
+          pytest tests/ --import-mode=importlib
 
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
